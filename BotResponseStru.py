@@ -1,15 +1,17 @@
 # importing packages
+#Make sure for Python 3.9 version the numpy version
+#should be numpy==1.22.0
 from tkinter import *
 import tkinter as tk
 import openpyxl
 from openpyxl import load_workbook
 import pandas as pd
 import tkinter.messagebox as tmsg
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import time
 from datetime import datetime
 import re
-from PIL import ImageTk,Image
+#from PIL import ImageTk,Image
 import pyttsx3
 #Open the RPA_T1 workbook
 wb2 = openpyxl.load_workbook('Sizmek_TS.xlsx')
@@ -103,22 +105,7 @@ def extract_non_third_party_records(sh1):
 non_third_party_records = extract_non_third_party_records(sh1)
 print("Non-third party records:", non_third_party_records)
 #Plot third and non third party records
-def plot_third_party_records(sh1):
-    third_party_records = 0
-    non_third_party_records = 0
-    for row in range(24, 30):
-        for col in range(3, 4):
-            cell = sh1.cell(row=row, column=col)
-            match = re.search(r'_\d{1}rd', cell.value)
-            if match:
-                third_party_records += 1
-            else:
-                non_third_party_records += 1
-    labels = ['Third Party Records', 'Non-Third Party Records']
-    values = [third_party_records, non_third_party_records]
-    plt.bar(labels, values)
-    plt.savefig("bar_chart.png")
-    plt.clf()
+
 #plot_third_party_records(sh1)
 
 #Reading all dates for Start date
@@ -199,7 +186,7 @@ def extract_end_date_matching(string, date_range):
             print(f"Matching end Date extracted in cell {cell.coordinate}: {formatted_date}")
             return f"\nMatching end Date extracted in cell \n{cell.coordinate}: {formatted_date}"
 
-extract_end_date_matching('20220717',[('I',24),('I',29)])
+print(extract_end_date_matching('20220717',[('I',24),('I',29)]))
 
 #Bot Response
 def chat():
@@ -227,14 +214,6 @@ def chat():
         engine.say(f'Total third party records are {total_count}')
         engine.runAndWait()
         input.focus_set()
-    elif text.strip() == 'Plot Third Party Records':
-        plot_third_party_records(sh1)
-        plot_window = Toplevel(workbot_wd )
-        plot_window.title("Bar Chart")
-        img = Image.open("bar_chart.png")
-        img = ImageTk.PhotoImage(img)
-        img_label = Label(plot_window, image=img)
-        img_label.pack()
     elif text.strip() == 'Count total non third party records':
         non_third_count = extract_non_third_party_records(sh1)
         total_non_third_count = int(non_third_count)
